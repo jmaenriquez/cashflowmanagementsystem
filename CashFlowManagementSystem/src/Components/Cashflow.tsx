@@ -1,5 +1,6 @@
 import React from "react";
-import {EllipsisVertical} from "lucide-react";
+import {EllipsisVertical, Plus} from "lucide-react";
+import Form from "./Form";
 
 function Cashflow() {
 
@@ -13,6 +14,7 @@ function Cashflow() {
   ];
 
   const totalAmount = cashflowData.reduce((total, item) => total + item.amount, 0);
+  const [isOpen, setIsOpen] = React.useState(false);
 
 
   return (
@@ -22,23 +24,32 @@ function Cashflow() {
           Cash Flow Statement
         </h1>
 
-        <div className="actions mt-12 flex justify-end">
+        <div className="actions mt-12 mb-6 flex justify-end">
           <input
-            className="border-2 rounded-lg p-2 mr-4 h-10"
+            className="border-2 rounded-lg p-2 mr-4 h-[41px] w-[150px]"
             type="date"
             placeholder="Start Date"
           />
           <input
-            className="border-2 rounded-lg p-2 mr-4 h-10"
+            className="border-2 rounded-lg p-2 mr-4 h-[41px] w-[150px]"
             type="date"
             placeholder="End Date"
           />
-          <button className="bg-[#3671D9] font-semibold text-white h-10 pl-4 pr-4 rounded hover:bg-[#2a5cb0]">
-            New Record
+          <button onClick={() => setIsOpen(true)} 
+          className="bg-[#3671D9] font-semibold text-white h-[41px] w-[150px] p-4 rounded-lg hover:bg-[#2a5cb0] flex flex-row items-center justify-center"
+          >
+            <Plus className="w-5 h-5 mr-1 relative top-[1px]" />
+            <span>New Record</span>
           </button>
         </div>
 
-        <div className="table-auto md:table-fixed mt-2">
+        <div>
+          <Form isOpen = {isOpen} 
+          onClose={() => setIsOpen(false)}
+          />  
+        </div>
+
+        <div className="table-auto md:table-fixed mt-2 overflow-x-auto rounded-lg shadow-lg">
           <table className="w-full text-left rounded-lg text-[#1E293B] shadow-lg">
             <thead className="bg-[#3671D9] text-white h-12">
               <tr className="">
@@ -63,9 +74,9 @@ function Cashflow() {
               ))}
             </tbody>
 
-            <tfoot>
-              <tr className="mt-4">
-                <th className="py-4 pl-4">Total</th>
+            <tfoot className="border-t ">
+              <tr className="">
+                <th className="py-4 pl-4">Grand Total</th>
                 <th className="py-4 pl-4"></th>
                 <th className="py-4 pl-4">{totalAmount}</th>
                 <th></th>

@@ -1,6 +1,6 @@
 function Dashboard() {
   return (
-    <div className="pt-16 w-full pt-16 pl-12 pr-12">
+    <div className="pt-16 w-full pt-16 px-12 font-roboto">
       <h1 className="text-4xl font-semibold text-[#1e293b]">Dashboard</h1>
 
       <div className="cards w-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mt-12">
