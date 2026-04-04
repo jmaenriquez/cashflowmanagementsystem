@@ -12,7 +12,8 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Navigation />}>
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route index element={<Dashboard />} />
+          <Route path='/dashboard' element={<Dashboard />} />
           <Route path="/cashflow" element={<Cashflow />} />
           <Route path="/balancesheet" element={<BalanceSheet />} />
           <Route path="*" element={<PageNotFound />} />

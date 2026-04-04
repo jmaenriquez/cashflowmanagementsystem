@@ -3,7 +3,7 @@ import { NavLink } from "react-router-dom";
 
 function SideNav() {
   let listItems = [
-    {to: "/dashboard", name: "Dashboard", key: "dashboard", icon: LayoutDashboard},
+    {to: "/", name: "Dashboard", key: "dashboard", icon: LayoutDashboard},
     {to: "/cashflow", name: "Cash Flow", key: "cashflow", icon: ChartSpline},
     {to: "/balancesheet", name: "Balance Sheet", key: "balancesheet", icon: StickyNote },
   ];
