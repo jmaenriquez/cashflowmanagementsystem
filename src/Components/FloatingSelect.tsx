@@ -1,16 +1,24 @@
 type FloatingSelectProps = {
-    label: string;
-    options: string[];
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  label: string;
+  options: string[];
+  value: string;
+  required?: boolean;
+  onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
-function FloatingSelect({ label, options, value, onChange }: FloatingSelectProps) {
+function FloatingSelect({
+  label,
+  options,
+  value,
+  required,
+  onChange,
+}: FloatingSelectProps) {
   return (
     <div className="relative w-full my-8">
       <select
         value={value}
         onChange={onChange}
+        required={required}
         className="peer w-full border-b-2 border-gray-400 focus:border-blue-500 outline-none py-2 bg-transparent"
       >
         <option value=""></option>
@@ -33,7 +41,7 @@ function FloatingSelect({ label, options, value, onChange }: FloatingSelectProps
         {label}
       </label>
     </div>
-  )
+  );
 }
 
-export default FloatingSelect
+export default FloatingSelect;
