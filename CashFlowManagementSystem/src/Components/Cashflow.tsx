@@ -25,14 +25,23 @@ function Cashflow() {
         </h1>
 
         <div className="actions mt-12 mb-6 flex justify-end">
+  
           <input
             className="border-2 rounded-lg p-2 mr-4 h-[41px] w-[150px]"
-            type="date"
+            type="text"
+            onFocus={(e) => (e.target.type = "date")}
+              onBlur={(e) => {
+              if (!e.target.value) e.target.type = "text";
+              }}
             placeholder="Start Date"
           />
           <input
             className="border-2 rounded-lg p-2 mr-4 h-[41px] w-[150px]"
-            type="date"
+            type="text"
+            onFocus={(e) => (e.target.type = "date")}
+              onBlur={(e) => {
+              if (!e.target.value) e.target.type = "text";
+              }}
             placeholder="End Date"
           />
           <button onClick={() => setIsOpen(true)} 
