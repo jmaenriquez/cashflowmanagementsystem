@@ -16,6 +16,14 @@ function Form({ isOpen, onClose }: FormProps) {
     [selectedAccType, setSelectedAccType] = React.useState(""),
     [amount, setAmount] = React.useState("");
 
+  // const [inputs, setInputs] = React.useState({
+  //   date: "",
+  //   description: "",
+  //   selectedAccGrp: "",
+  //   selectedAccType: "",
+  //   amount: "",
+  // })
+
   const accgrp = ["Asset", "Liability", "Equity", "Revenue", "Expense"];
   const acctype = ["Debit", "Credit"];
 
