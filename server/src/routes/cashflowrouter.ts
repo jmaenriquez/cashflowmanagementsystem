@@ -1,5 +1,7 @@
+//Points Client requests to the appropriate controller
+
 import { Router } from 'express';
-import { createRecord, getRecords, updateRecord, deleteRecord } from '../controllers/recordcontrollers';
+import { createRecord, getRecords, updateRecord, deleteRecord } from '../controllers/cashflowrec';
 
 const router = Router();
 
