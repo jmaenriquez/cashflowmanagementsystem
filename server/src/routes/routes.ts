@@ -1,11 +1,11 @@
 import { Router } from 'express';
-import { getTransactions, createTransaction, updateTransaction, deleteTransaction } from '../controllers/controllers';
+import { createRecord, getRecords, updateRecord, deleteRecord } from '../controllers/recordcontrollers';
 
 const router = Router();
 
-router.get('/transactions', getTransactions);
-router.post('/transactions', createTransaction);
-router.put('/transactions/:id', updateTransaction);
-router.delete('/transactions/:id', deleteTransaction);
+router.get('/transactions', getRecords);
+router.post('/transactions', createRecord);
+router.put('/transactions/:id', updateRecord);
+router.delete('/transactions/:id', deleteRecord);
 
 export default router;
