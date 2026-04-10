@@ -1,21 +1,57 @@
 import { Request, Response } from "express";
+import *  as accgroup  from '../services/accgroupservice'
 
-function createAccGroup(req: Request, res: Response){ const {accname} = req.body;
-    //Add logic to create a new account group in the database
+async function createAccGroup(req: Request, res: Response){
+    
+    const { name } = req.body
+
+    try{
+        const account = req.body;
+        const create = await accgroup.addAccGroup(account);
+        res.status(201).json(create);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to create ' + name + ' Account'})
+    }
 }
 
-function getAccGroups(req: Request, res: Response){
-    //for fetching list of account groups from the database
-    res.send('Get account groups');
+async function getAccGroups(req: Request, res: Response){
+    
+    try{
+        const fetchData = await accgroup.getAccGroups();
+        res.json(fetchData);
+    }catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to fetch the Account List'})
+    }
 }
 
-function updateAccGroup(req: Request, res: Response){const {id} = req.params;
-    //For updating an existing account group in the database
+async function updateAccGroup(req: Request, res: Response){
+    
+    const { id } = req.params;
+    const { name } = req.body
+
+    try{
+        const updateAcc = await accgroup.updateAccGroup(Number(id), req.body);
+        res.json(updateAcc)
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to update ' + name + ' Account' })
+    }
 }
 
-function deleteAccGroup(req: Request, res: Response){const {id} = req.params;
-    //For deleting an account group from the database
+async function deleteAccGroup(req: Request, res: Response){
+    
+    const { id } = req.params
+    const { name } = req.body
+
+    try{
+        const deleteAcc = await accgroup.deleteAccGroup(Number(id), req.body);
+        res.json(deleteAcc);   
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Failed to delete ' + name + ' Account' })
+    }
 }
 
 export { getAccGroups, createAccGroup, updateAccGroup, deleteAccGroup };
-

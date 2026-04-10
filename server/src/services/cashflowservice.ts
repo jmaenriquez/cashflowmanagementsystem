@@ -4,11 +4,11 @@ import pool from '../config/dbcon';
 import { CashFlowRecord } from '../types';
 
 async function addRecord(record: CashFlowRecord) {
-    const { date, description, accType, accGroup, amount } = record;
+    const { recdate, description, type, accgroup, amount } = record;
     const result = await pool.query(
         `INSERT INTO cashflowrecords (date, description, accType, accGroup, amount)
         VALUES($1,$2,$3,$4,$5) RETURNING *`,
-        [date, description, accType, accGroup, amount]
+        [recdate, description, type, accgroup, amount]
     );
 
     return result.rows[0];
@@ -20,14 +20,14 @@ async function getRecords(){
 }
 
 async function updateRecord(id: number, record: Partial<CashFlowRecord>) {
-    const { date, description, accType, accGroup, amount } = record;
+    const { recdate, description, type, accgroup, amount } = record;
     const result = await pool.query(
         `UPDATE cashflowrecords
-        SET date = $1, description = $2, accType = $3, accGroup = $4, amount = $5
+        SET recdate = $1, description = $2, type = $3, accgroup = $4, amount = $5
         WHERE id = $6
         RETURNING *`,
 
-        [date, description, accType, accGroup, amount, id]
+        [recdate, description, type, accgroup, amount, id]
     );
 
     return result.rows[0];

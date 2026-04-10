@@ -2,44 +2,45 @@ import pool from "../config/dbcon";
 import { AccountGroup } from "../types";
 
 async function addAccGroup(acc: AccountGroup) {
-    const {name, description} = acc;
+    const {accname, description} = acc;
 
     const result = await pool.query(
-        `INSERT INTO accountgroups (name, description)
+        `INSERT INTO accgroup (accname, description)
         VALUES ($1,$2)
-        RETURNING *'`,
-        [name, description]
+        RETURNING *`,
+        [accname, description]
     );
 
     return result.rows[0];
 }
 
 async function getAccGroups() {
-    const result = await pool.query(`SELECT * FROM accountgroups`);
+    const result = await pool.query(`SELECT * FROM accgroup`);
     return result.rows;
 }
 
+
 async function updateAccGroup(id:number, acc: AccountGroup){
-    const {name, description} = acc;
+    const {accname, description} = acc;
 
     const result = await pool.query(
-        `UPDATE accountgroups
-        SET name = $1, description = $2
+        `UPDATE accgroup
+        SET accname = $1, description = $2
         WHERE id - $3
         RETURNING *`,
-        [name, description, id]
+        [accname, description, id]
     );
 
     return result.rows[0]
 }
 
 async function deleteAccGroup(id: number, acc: AccountGroup) {
-    const { name } = acc;
+    const { accname } = acc;
     await pool.query(
-        `DELETE FROM accountgroups WHERE id = $1`, [id],
+        `DELETE FROM accgroup WHERE id - $1`, [id],
     )
 
-    return { message: name + ' deleted successfully' };
+    return { message: accname + ' deleted successfully' };
 }
 
 export { addAccGroup, getAccGroups, updateAccGroup, deleteAccGroup };

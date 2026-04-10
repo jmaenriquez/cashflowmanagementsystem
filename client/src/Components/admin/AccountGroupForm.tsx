@@ -1,25 +1,44 @@
 import React from "react";
 import FloatingInputs from "../FloatingInputs";
+import api from "../../api";
+import swal from "sweetalert2";
 
 type FormProps = {
   isOpen: boolean;
   onClose: () => void;
 };
 
+interface accounts {
+  accname: string;
+  description: string;
+}
+
 function accGroupForm({ isOpen, onClose }: FormProps) {
   if (!isOpen) return null;
 
-  const [name, setName] = React.useState(""),
-    [description, setDescription] = React.useState("");
+  const [account, setAccount] = React.useState<accounts>({
+    accname: "",
+    description: "",
+  });
 
-  const handleSubmit = () => {
-    name === "" || description === ""
-      ? alert("Please fill in all fields.")
-      : console.log(
-          { name, description },
-          alert("Account added successfully!"),
-        );
+  const handleSubmit = async () => {
+    if (!account.accname && !account.description) {
+      swal.fire({
+        icon: "error",
+        title: "Error!",
+        text: "Please fill all the required fields.",
+      });
+      return;
+    }
+    await api.createAccGroup(account);
+    swal.fire({
+      icon: "success",
+      title: "Saved!",
+      text: account.accname + " has been saved successfully.",
+    });
+    return;
   };
+
   return (
     <div
       className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
@@ -36,17 +55,21 @@ function accGroupForm({ isOpen, onClose }: FormProps) {
             <FloatingInputs
               label="Account Name"
               type="text"
-              value={name}
+              value={account.accname}
               required={true}
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) =>
+                setAccount({ ...account, accname: e.target.value })
+              }
             />
 
             <FloatingInputs
               label="Description"
               type="text"
-              value={description}
+              value={account.description}
               required={true}
-              onChange={(e) => setDescription(e.target.value)}
+              onChange={(e) =>
+                setAccount({ ...account, description: e.target.value })
+              }
             />
           </div>
 

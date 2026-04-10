@@ -2,16 +2,16 @@
 
 interface CashFlowRecord {
     id: number;
-    date: Date;
+    recdate: Date;
     description: string;
-    accType: 'Debit' | 'Credit';
-    accGroup: number; //FK
+    type: 'Debit' | 'Credit';
+    accgroup: number; //FK
     amount: number;
 }
 
 interface AccountGroup {
     id: number;
-    name: string;
+    accname: string;
     description: string;
 }
 

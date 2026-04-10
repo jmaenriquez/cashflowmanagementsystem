@@ -1,41 +1,20 @@
 import React from "react";
 import { EllipsisVertical, Plus } from "lucide-react";
 import Form from "./AccountGroupForm";
+import api from "../../api";
+
+interface accountList {
+  accname: string;
+  description: string;
+}
 
 function accGrp() {
-  const cashflowData = [
-    {
-      name: "Asset",
-      desc: "Description 1",
-    },
-
-    {
-      name: "Asset",
-      desc: "Description 2",
-    },
-
-    {
-      name: "Asset",
-      desc: "Description 3",
-    },
-
-    {
-      name: "Asset",
-      desc: "Description 4",
-    },
-
-    {
-      name: "Asset",
-      desc: "Description 5",
-    },
-
-    {
-      name: "Asset",
-      desc: "Description 6",
-    },
-  ];
-
+  const [account, setAccount] = React.useState<accountList[]>([]);
   const [isOpen, setIsOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    api.getAccGroup().then((data) => setAccount(data));
+  }, []);
 
   return (
     <div className="flex font-roboto text-wide w-full">
@@ -86,15 +65,23 @@ function accGrp() {
               </tr>
             </thead>
             <tbody>
-              {cashflowData.map((item, index) => (
-                <tr key={index}>
-                  <td className="py-4 pl-4">{item.name}</td>
-                  <td className="py-4 pl-4">{item.desc}</td>
-                  <td className="py-4 pl-4">
-                    <EllipsisVertical />
+              {account.length > 0 ? (
+                account.map((item, index) => (
+                  <tr key={index}>
+                    <td className="py-4 pl-4">{item.accname}</td>
+                    <td className="py-4 pl-4">{item.description}</td>
+                    <td className="py-4 pl-4">
+                      <EllipsisVertical />
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={3} className="p-6 text-gray-500">
+                    No data to show.
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
