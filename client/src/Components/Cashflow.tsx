@@ -1,52 +1,33 @@
 import React from "react";
 import { EllipsisVertical, Plus } from "lucide-react";
 import Form from "./Form";
+import api from "../api";
+
+interface Records {
+  recdate: string;
+  description: string;
+  type: "Debit" | "Credit";
+  accgrp: string;
+  amount: number;
+}
 
 function Cashflow() {
-  const cashflowData = [
-    {
-      desc: "Description 1",
-      accgrp: "Asset",
-      amount: 1961,
-      date: "Jan 1, 2026",
-    },
-    {
-      desc: "Description 2",
-      accgrp: "Asset",
-      amount: 1961,
-      date: "Jan 1, 2026",
-    },
-    {
-      desc: "Description 3",
-      accgrp: "Asset",
-      amount: 1961,
-      date: "Jan 1, 2026",
-    },
-    {
-      desc: "Description 4",
-      accgrp: "Asset",
-      amount: 1961,
-      date: "Jan 1, 2026",
-    },
-    {
-      desc: "Description 5",
-      accgrp: "Asset",
-      amount: 1961,
-      date: "Jan 1, 2026",
-    },
-    {
-      desc: "Description 6",
-      accgrp: "Asset",
-      amount: 1961,
-      date: "Jan 1, 2026",
-    },
-  ];
-
-  const totalAmount = cashflowData.reduce(
-    (total, item) => total + item.amount,
-    0,
-  );
+  const [cashflowrec, setcashflowrec] = React.useState<Records[]>([]);
+  const totalAmount = cashflowrec
+    .reduce((total, item) => total + Number(item.amount), 0)
+    .toFixed(2);
   const [isOpen, setIsOpen] = React.useState(false);
+
+  const refreshData = () => {
+    api.getRecord().then((data) => setcashflowrec(data));
+  };
+
+  React.useEffect(() => {
+    api.getRecord().then((data) => {
+      console.log("date raw: ", data[0].recdate);
+      setcashflowrec(data);
+    });
+  }, []);
 
   return (
     <div className="flex font-roboto text-wide w-full">
@@ -84,7 +65,11 @@ function Cashflow() {
         </div>
 
         <div>
-          <Form isOpen={isOpen} onClose={() => setIsOpen(false)} />
+          <Form
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            onSave={refreshData}
+          />
         </div>
 
         <div className="table-auto md:table-fixed mt-2 overflow-x-auto rounded-lg shadow-lg">
@@ -99,27 +84,39 @@ function Cashflow() {
               </tr>
             </thead>
             <tbody>
-              {cashflowData.map((item, index) => (
-                <tr key={index}>
-                  <td className="py-4 pl-4">{item.desc}</td>
-                  <td className="py-4 pl-4">{item.accgrp}</td>
-                  <td className="py-4 pl-4">{item.amount}</td>
-                  <td className="py-4 pl-4">{item.date}</td>
-                  <td className="py-4 pl-4">
-                    <EllipsisVertical />
+              {cashflowrec.length > 0 ? (
+                cashflowrec.map((item, index) => (
+                  <tr key={index}>
+                    <td className="py-4 pl-4">{item.description}</td>
+                    <td className="py-4 pl-4">{item.accgrp}</td>
+                    <td className="py-4 pl-4">{item.amount}</td>
+                    <td className="py-4 pl-4">{item.recdate.slice(0, 10)}</td>
+                    <td className="py-4 pl-4">
+                      <EllipsisVertical />
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={3} className="p-6 text-gray-500">
+                    No data to show.
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
 
-            <tfoot className="border-t ">
-              <tr className="">
-                <th className="py-4 pl-4">Grand Total</th>
-                <th className="py-4 pl-4"></th>
-                <th className="py-4 pl-4">{totalAmount}</th>
-                <th></th>
-              </tr>
-            </tfoot>
+            {cashflowrec.length > 0 ? (
+              <tfoot className="border-t ">
+                <tr className="">
+                  <th className="py-4 pl-4">Grand Total</th>
+                  <th className="py-4 pl-4"></th>
+                  <th className="py-4 pl-4">{totalAmount}</th>
+                  <th></th>
+                </tr>
+              </tfoot>
+            ) : (
+              ""
+            )}
           </table>
         </div>
       </div>

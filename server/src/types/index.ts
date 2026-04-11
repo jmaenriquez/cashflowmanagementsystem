@@ -5,7 +5,7 @@ interface CashFlowRecord {
     recdate: Date;
     description: string;
     type: 'Debit' | 'Credit';
-    accgroup: number; //FK
+    accgrp: number; //FK
     amount: number;
 }
 

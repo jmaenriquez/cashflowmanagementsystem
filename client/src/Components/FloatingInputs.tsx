@@ -3,7 +3,7 @@ import React from "react";
 type FloatingInputsProps = {
   label: string;
   type?: string;
-  value: string;
+  value: string | number;
   required?: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
@@ -16,14 +16,15 @@ function InputFields({
   onChange,
 }: FloatingInputsProps) {
   const date = type === "date";
+  const number = type === "number";
 
   return (
     <div className="relative w-full my-8">
       <input
-        type={type} // 👈 no more switching
+        type={type}
         value={value}
         onChange={onChange}
-        placeholder={date ? "" : " "}
+        placeholder={date || number ? "" : " "}
         required={required}
         className="peer w-full border-b-2 border-gray-400 focus:border-blue-500 outline-none py-2 bg-transparent"
       />
@@ -32,7 +33,7 @@ function InputFields({
         className={`
                 absolute left-0 transition-all
                 ${
-                  date
+                  date || number
                     ? "-top-3 text-sm text-gray-400"
                     : value
                       ? "-top-3 text-sm text-blue-500"

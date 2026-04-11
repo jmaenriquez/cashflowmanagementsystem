@@ -5,9 +5,9 @@ import { createRecord, getRecords, updateRecord, deleteRecord } from '../control
 
 const router = Router();
 
-router.get('/record', getRecords);
-router.post('/record', createRecord);
-router.put('/record/:id', updateRecord);
-router.delete('/record/:id', deleteRecord);
+router.get('/cashflow', getRecords);
+router.post('/cashflow', createRecord);
+router.put('/cashflow/:id', updateRecord);
+router.delete('/cashflow/:id', deleteRecord);
 
 export default router;

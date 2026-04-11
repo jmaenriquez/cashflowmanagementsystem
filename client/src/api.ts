@@ -1,4 +1,4 @@
-const BASE_URL = 'https://localhost:3000/api';
+const BASE_URL = 'http://localhost:3000/api';
 
 
 //---------------------- Account Group Routing ---------------------------
@@ -6,15 +6,14 @@ const BASE_URL = 'https://localhost:3000/api';
 async function createAccGroup (account:{
         accname: string;       
         description: string;
-    }) {
+    })
      {
         const res = await fetch(`${BASE_URL}/accounts`, {
             method: 'POST',
-            headers: { 'Content Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(account),
         });
         return res.json();
-    }
 }
 
 async function getAccGroup(){
@@ -48,10 +47,10 @@ async function deleteAccGroup(id: Number){
 //---------------------- Cashflow Rec Routing ---------------------------
 
 async function addRecord(record:{
-    date: Date
+    recdate: string
     description: string;
-    accType: 'Debit' | 'Credit';
-    accGroup: number;
+    type: 'Debit' | 'Credit';
+    accgrp: number;
     amount: number;
 }){
     const res = await fetch(`${BASE_URL}/cashflow`, {
@@ -69,10 +68,10 @@ async function getRecord(){
 }
 
 async function updateRecord (id:Number, record:{
-    date: Date
+    recdate: Date
     description: string;
-    accType: 'Debit' | 'Credit';
-    accGroup: number;
+    type: 'Debit' | 'Credit';
+    accgrp: number;
     amount: number;
 }){
     const res = await fetch(`${BASE_URL}/cashflow/${id}`, {

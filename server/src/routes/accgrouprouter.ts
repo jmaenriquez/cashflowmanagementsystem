@@ -3,9 +3,9 @@ import { createAccGroup, getAccGroups, updateAccGroup, deleteAccGroup } from '..
 
 const router = Router();
 
-router.get('/accgroups', getAccGroups);
-router.post('/accgroups', createAccGroup);
-router.put('/accgroups/:id', updateAccGroup);
-router.delete('/accgroups/:id', deleteAccGroup);  
+router.get('/accounts', getAccGroups);
+router.post('/accounts', createAccGroup);
+router.put('/accounts/:id', updateAccGroup);
+router.delete('/accounts/:id', deleteAccGroup);  
 
 export default router;

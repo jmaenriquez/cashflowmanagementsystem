@@ -11,6 +11,15 @@ app.use(express.json());
 app.use('/api', cashflowroutes);
 app.use('/api', accgrouproutes);
 
+
+app.get('/test', (req, res) => {
+  res.json({ message: 'test route works' });
+});
+
+app.get('/api/test', (req, res) => {
+  res.json({ message: 'api test route works' });
+});
+
 app.get('/', (req, res) => {
   res.send('Hello');
 });

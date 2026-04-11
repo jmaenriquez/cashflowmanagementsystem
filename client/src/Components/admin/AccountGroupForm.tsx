@@ -6,6 +6,7 @@ import swal from "sweetalert2";
 type FormProps = {
   isOpen: boolean;
   onClose: () => void;
+  onSave: () => void;
 };
 
 interface accounts {
@@ -13,7 +14,7 @@ interface accounts {
   description: string;
 }
 
-function accGroupForm({ isOpen, onClose }: FormProps) {
+function accGroupForm({ isOpen, onClose, onSave }: FormProps) {
   if (!isOpen) return null;
 
   const [account, setAccount] = React.useState<accounts>({
@@ -22,7 +23,7 @@ function accGroupForm({ isOpen, onClose }: FormProps) {
   });
 
   const handleSubmit = async () => {
-    if (!account.accname && !account.description) {
+    if (!account.accname || !account.description) {
       swal.fire({
         icon: "error",
         title: "Error!",
@@ -36,7 +37,8 @@ function accGroupForm({ isOpen, onClose }: FormProps) {
       title: "Saved!",
       text: account.accname + " has been saved successfully.",
     });
-    return;
+    onSave();
+    onClose();
   };
 
   return (
@@ -75,6 +77,7 @@ function accGroupForm({ isOpen, onClose }: FormProps) {
 
           <div className="flex justify-end gap-3 mt-8">
             <button
+              type="button"
               onClick={handleSubmit}
               className="bg-blue-500 text-white rounded-lg w-[120px] text-xs h-9 hover:bg-blue-600"
             >
@@ -82,6 +85,7 @@ function accGroupForm({ isOpen, onClose }: FormProps) {
             </button>
 
             <button
+              type="button"
               onClick={onClose}
               className="bg-[#fff] text-[#3671D9] rounded-xl border border-[#3671D9] w-[120px] text-xs h-9 hover:bg-[#f0f0f0]"
             >

@@ -12,8 +12,14 @@ function accGrp() {
   const [account, setAccount] = React.useState<accountList[]>([]);
   const [isOpen, setIsOpen] = React.useState(false);
 
-  React.useEffect(() => {
+  const refreshData = () => {
     api.getAccGroup().then((data) => setAccount(data));
+  };
+
+  React.useEffect(() => {
+    api.getAccGroup().then((data) => {
+      setAccount(data);
+    });
   }, []);
 
   return (
@@ -52,7 +58,11 @@ function accGrp() {
         </div>
 
         <div>
-          <Form isOpen={isOpen} onClose={() => setIsOpen(false)} />
+          <Form
+            isOpen={isOpen}
+            onClose={() => setIsOpen(false)}
+            onSave={refreshData}
+          />
         </div>
 
         <div className="table-auto md:table-fixed mt-2 overflow-x-auto rounded-lg shadow-lg">

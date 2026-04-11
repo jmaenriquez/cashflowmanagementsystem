@@ -4,30 +4,40 @@ import pool from '../config/dbcon';
 import { CashFlowRecord } from '../types';
 
 async function addRecord(record: CashFlowRecord) {
-    const { recdate, description, type, accgroup, amount } = record;
+    const { recdate, description, type, accgrp, amount } = record;
     const result = await pool.query(
-        `INSERT INTO cashflowrecords (date, description, accType, accGroup, amount)
+        `INSERT INTO cashflowrecords (recdate, description, type, accgrp, amount)
         VALUES($1,$2,$3,$4,$5) RETURNING *`,
-        [recdate, description, type, accgroup, amount]
+        [recdate, description, type, accgrp, amount]
     );
 
     return result.rows[0];
 }
 
 async function getRecords(){
-    const result = await pool.query(`SELECT * FROM cashflowrecords`);
+    const result = await pool.query(`
+        SELECT
+            c.id,
+            TO_CHAR(c.recdate, 'MM-DD-YYYY') AS recdate,
+            c.description,
+            c.type,
+            a.accname AS accgrp,
+            c.amount::float AS amount
+        FROM cashflowrecords c
+        JOIN accgroup a ON c.accgrp = a.id
+        `)
     return result.rows;
 }
 
 async function updateRecord(id: number, record: Partial<CashFlowRecord>) {
-    const { recdate, description, type, accgroup, amount } = record;
+    const { recdate, description, type, accgrp, amount } = record;
     const result = await pool.query(
         `UPDATE cashflowrecords
-        SET recdate = $1, description = $2, type = $3, accgroup = $4, amount = $5
+        SET recdate = $1, description = $2, type = $3, accgrp = $4, amount = $5
         WHERE id = $6
         RETURNING *`,
 
-        [recdate, description, type, accgroup, amount, id]
+        [recdate, description, type, accgrp, amount, id]
     );
 
     return result.rows[0];

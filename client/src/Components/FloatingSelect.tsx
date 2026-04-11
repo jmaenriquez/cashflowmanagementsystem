@@ -1,6 +1,11 @@
+type Options = {
+  label: string;
+  value: string;
+};
+
 type FloatingSelectProps = {
   label: string;
-  options: string[];
+  options: Options[];
   value: string;
   required?: boolean;
   onChange: (e: React.ChangeEvent<HTMLSelectElement>) => void;
@@ -23,8 +28,8 @@ function FloatingSelect({
       >
         <option value=""></option>
         {options.map((opt) => (
-          <option key={opt} value={opt}>
-            {opt}
+          <option key={opt.value} value={opt.value}>
+            {opt.label}
           </option>
         ))}
       </select>
