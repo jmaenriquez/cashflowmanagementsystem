@@ -46,7 +46,7 @@ async function deleteAccGroup(req: Request, res: Response){
     const { name } = req.body
 
     try{
-        const deleteAcc = await accgroup.deleteAccGroup(Number(id), req.body);
+        const deleteAcc = await accgroup.deleteAccGroup(Number(id));
         res.json(deleteAcc);   
     } catch (err) {
         console.error(err);

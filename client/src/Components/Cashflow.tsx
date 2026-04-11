@@ -4,6 +4,7 @@ import Form from "./Form";
 import api from "../api";
 
 interface Records {
+  id: number;
   recdate: string;
   description: string;
   type: "Debit" | "Credit";

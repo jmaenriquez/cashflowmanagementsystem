@@ -3,24 +3,35 @@ import FloatingInputs from "../FloatingInputs";
 import api from "../../api";
 import swal from "sweetalert2";
 
-type FormProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: () => void;
-};
-
 interface accounts {
+  id?: number;
   accname: string;
   description: string;
 }
 
-function accGroupForm({ isOpen, onClose, onSave }: FormProps) {
-  if (!isOpen) return null;
+type FormProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: () => void;
+  item: accounts | null;
+};
 
+function accGroupForm({ isOpen, onClose, onSave, item }: FormProps) {
   const [account, setAccount] = React.useState<accounts>({
     accname: "",
     description: "",
   });
+
+  React.useEffect(() => {
+    if (item) {
+      setAccount({
+        accname: item.accname,
+        description: item.description,
+      });
+    } else {
+      setAccount({ accname: "", description: "" });
+    }
+  }, [item]);
 
   const handleSubmit = async () => {
     if (!account.accname || !account.description) {
@@ -31,15 +42,26 @@ function accGroupForm({ isOpen, onClose, onSave }: FormProps) {
       });
       return;
     }
-    await api.createAccGroup(account);
-    swal.fire({
-      icon: "success",
-      title: "Saved!",
-      text: account.accname + " has been saved successfully.",
-    });
+    {
+      !item
+        ? (await api.createAccGroup(account),
+          swal.fire({
+            icon: "success",
+            title: "Saved!",
+            text: account.accname + " has been saved successfully.",
+          }))
+        : (await api.updateAccGroup(item.id!, account),
+          swal.fire({
+            icon: "success",
+            title: "Saved!",
+            text: account.accname + " has been edited successfully.",
+          }));
+    }
     onSave();
     onClose();
   };
+
+  if (!isOpen) return null;
 
   return (
     <div

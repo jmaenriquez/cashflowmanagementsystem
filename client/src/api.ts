@@ -23,7 +23,7 @@ async function getAccGroup(){
 
 async function updateAccGroup(id: Number, account:{
     accname: string;
-    decription: string;
+    description: string;
 }){
     const res = await fetch(`${BASE_URL}/accounts/${id}`,{
         method: 'PUT',
