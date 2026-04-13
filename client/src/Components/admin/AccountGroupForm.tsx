@@ -61,6 +61,14 @@ function accGroupForm({ isOpen, onClose, onSave, item }: FormProps) {
     onClose();
   };
 
+  React.useEffect(() => {
+    if (!isOpen) {
+      setAccount({
+        accname: "",
+        description: "",
+      });
+    }
+  }, [isOpen]);
   if (!isOpen) return null;
 
   return (

@@ -1,7 +1,9 @@
 import React from "react";
 import { EllipsisVertical, Plus, Pencil, Trash } from "lucide-react";
 import Form from "./AccountGroupForm";
+import Confirm from "../ConfirmtaionPopUp";
 import api from "../../api";
+import swal from "sweetalert2";
 
 interface accountList {
   id: number;
@@ -11,12 +13,13 @@ interface accountList {
 
 function accGrp() {
   const [account, setAccount] = React.useState<accountList[]>([]);
-  const [isOpen, setIsOpen] = React.useState(false);
+  const [isAddAcc, setIsAddAcc] = React.useState(false);
+  const [isDelete, setIsDelete] = React.useState(false);
 
   const [isActionOpen, setIsActionOpen] = React.useState<number | null>(null); //for tooltip
   const [selectedItem, setSelectedItem] = React.useState<accountList | null>(
     null,
-  ); //check if files have id
+  ); //check if have id
 
   const refreshData = () => {
     api.getAccGroup().then((data) => setAccount(data));
@@ -57,9 +60,9 @@ function accGrp() {
           <button
             onClick={() => {
               setSelectedItem(null);
-              setIsOpen(true);
+              setIsAddAcc(true);
             }}
-            className="bg-[#3671D9] font-semibold text-white h-[41px] w-[150px] p-4 rounded-lg hover:bg-[#2a5cb0] flex flex-row items-center justify-center"
+            className="bg-[#3671D9] text-semibold text-white h-[41px] w-[150px] p-4 rounded-lg hover:bg-[#2a5cb0] flex flex-row items-center justify-center"
           >
             <Plus className="w-5 h-5 mr-1 relative top-[1px]" />
             <span>Account</span>
@@ -68,10 +71,27 @@ function accGrp() {
 
         <div>
           <Form
-            isOpen={isOpen}
-            onClose={() => setIsOpen(false)}
+            isOpen={isAddAcc}
+            onClose={() => setIsAddAcc(false)}
             onSave={refreshData}
             item={selectedItem}
+          />
+          <Confirm
+            title="Delete Account?"
+            text={`Are you sure you want to delete ${selectedItem?.accname}?`}
+            isOpen={isDelete}
+            onConfirm={async () => {
+              await api.deleteAccGroup(selectedItem!.id);
+              refreshData();
+              await swal.fire({
+                icon: "success",
+                title: "Success!",
+                text: `${selectedItem?.accname} deleted successfully.`,
+                timer: 3000,
+              });
+              setIsDelete(false);
+            }}
+            onClose={() => setIsDelete(false)}
           />
         </div>
 
@@ -117,14 +137,7 @@ function accGrp() {
                                     console.log("Edit ", item.accname);
                                     setSelectedItem(item);
                                     setIsActionOpen(null);
-                                    setIsOpen(true);
-
-                                    <Form
-                                      isOpen={isOpen}
-                                      onClose={() => setIsOpen(false)}
-                                      onSave={refreshData}
-                                      item={selectedItem}
-                                    />;
+                                    setIsAddAcc(true);
                                   }}
                                   className="flex w-full items-center px-4 py-2 text-sm text-[#1E293B] hover:bg-gray-200 transition-colors"
                                 >
@@ -134,7 +147,9 @@ function accGrp() {
                                 <button
                                   onClick={() => {
                                     console.log("Delete ", item.accname);
+                                    setSelectedItem(item);
                                     setIsActionOpen(null);
+                                    setIsDelete(true);
                                   }}
                                   className="flex w-full items-center px-4 py-2 text-sm text-red-600 hover:bg-red-100 transition-colors"
                                 >

@@ -43,14 +43,13 @@ async function updateAccGroup(req: Request, res: Response){
 async function deleteAccGroup(req: Request, res: Response){
     
     const { id } = req.params
-    const { name } = req.body
 
     try{
         const deleteAcc = await accgroup.deleteAccGroup(Number(id));
         res.json(deleteAcc);   
     } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Failed to delete ' + name + ' Account' })
+        res.status(500).json({ error: 'Failed to delete Account' })
     }
 }
 

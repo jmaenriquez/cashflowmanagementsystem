@@ -29,11 +29,7 @@ function SideNav() {
       <div className="pl-6 pt-6">
         <div className="top-row flex items-center gap-4">
           <div className="logo">
-            <img
-              className="w-16"
-              src="src/Components/img/openbooklogo.png"
-              alt="Logo"
-            />
+            <img className="w-16" src="/openbooklogo.png" alt="Logo" />
           </div>
           <h1 className="text-xl font-bold">OPEN BOOK</h1>
         </div>

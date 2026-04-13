@@ -38,7 +38,7 @@ async function deleteAccGroup(id: Number){
     const res = await fetch(`${BASE_URL}/accounts/${id}`, {
         method: 'DELETE',
     });
-    res.json();
+    return res.json();
 }
 
 //------------------------- End of routing ------------------------------
