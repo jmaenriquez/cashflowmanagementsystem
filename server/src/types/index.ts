@@ -9,10 +9,17 @@ interface CashFlowRecord {
     amount: number;
 }
 
+interface CashFlowRecordDTO{
+    records: CashFlowRecord[];
+    totalDebit: number;
+    totalCredit: number;
+    netAmount: number;
+}
+
 interface AccountGroup {
     id: number;
     accname: string;
     description: string;
 }
 
-export type { CashFlowRecord, AccountGroup };
+export type { CashFlowRecord, AccountGroup, CashFlowRecordDTO };
