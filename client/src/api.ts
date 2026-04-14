@@ -68,7 +68,7 @@ async function getRecord(){
 }
 
 async function updateRecord (id:Number, record:{
-    recdate: Date
+    recdate: string
     description: string;
     type: 'Debit' | 'Credit';
     accgrp: number;

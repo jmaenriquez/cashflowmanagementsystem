@@ -18,10 +18,11 @@ async function getRecords(){
     const result = await pool.query(`
         SELECT
             c.id,
-            TO_CHAR(c.recdate, 'MM-DD-YYYY') AS recdate,
+            TO_CHAR(c.recdate, 'YYYY-MM-DD') AS recdate,
             c.description,
             c.type,
-            a.accname AS accgrp,
+            c.accgrp,
+            a.accname AS accgrpname,
             c.amount::float AS amount
         FROM cashflowrecords c
         JOIN accgroup a ON c.accgrp = a.id

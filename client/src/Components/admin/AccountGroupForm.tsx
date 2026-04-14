@@ -31,7 +31,7 @@ function accGroupForm({ isOpen, onClose, onSave, item }: FormProps) {
     } else {
       setAccount({ accname: "", description: "" });
     }
-  }, [item]);
+  }, [item]); //Get Item Values
 
   const handleSubmit = async () => {
     if (!account.accname || !account.description) {
@@ -49,12 +49,14 @@ function accGroupForm({ isOpen, onClose, onSave, item }: FormProps) {
             icon: "success",
             title: "Saved!",
             text: account.accname + " has been saved successfully.",
+            timer: 3000
           }))
         : (await api.updateAccGroup(item.id!, account),
           swal.fire({
             icon: "success",
             title: "Saved!",
             text: account.accname + " has been edited successfully.",
+            timer: 3000
           }));
     }
     onSave();
@@ -68,7 +70,7 @@ function accGroupForm({ isOpen, onClose, onSave, item }: FormProps) {
         description: "",
       });
     }
-  }, [isOpen]);
+  }, [isOpen]); // Clear fields if close
   if (!isOpen) return null;
 
   return (

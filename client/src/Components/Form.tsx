@@ -4,13 +4,8 @@ import FloatingInputs from "./FloatingInputs";
 import api from "../api";
 import swal from "sweetalert2";
 
-type FormProps = {
-  isOpen: boolean;
-  onClose: () => void;
-  onSave: () => void;
-};
-
 interface record {
+  id?: number;
   recdate: string;
   description: string;
   type: "Debit" | "Credit";
@@ -18,7 +13,14 @@ interface record {
   amount: number;
 }
 
-function Form({ isOpen, onClose, onSave }: FormProps) {
+type FormProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  onSave: () => void;
+  item: record | null;
+};
+
+function Form({ isOpen, onClose, onSave, item }: FormProps) {
   const [rec, setRec] = React.useState<record>({
     recdate: "",
     description: "",
@@ -29,7 +31,8 @@ function Form({ isOpen, onClose, onSave }: FormProps) {
 
   const [accGroups, setAccGroups] = React.useState<
     { id: Number; accname: string }[]
-  >([]);
+  >([]); //fetching accounts
+
   const [selectedAccGroup, setSelectedAccGroup] = React.useState("");
   const [selectedAccType, setSelectedAccType] = React.useState("");
 
@@ -54,6 +57,30 @@ function Form({ isOpen, onClose, onSave }: FormProps) {
     });
   }, []);
 
+  React.useEffect(() => {
+    if(item){
+      setRec({
+        recdate: item.recdate,
+        description: item.description,
+        type: item.type,
+        accgrp: item.accgrp,
+        amount: item.amount
+      });
+      setSelectedAccType(item.type),
+      setSelectedAccGroup(String(item.accgrp))
+    } else{
+      setRec({
+        recdate: "",
+        description: "",
+        type: 'Debit',
+        accgrp: 0,
+        amount: 0
+      })
+      setSelectedAccType(""),
+      setSelectedAccGroup("")
+    }
+  }, [item]);
+
   const handleSubmit = async () => {
     if (
       !rec.recdate ||
@@ -68,16 +95,40 @@ function Form({ isOpen, onClose, onSave }: FormProps) {
         text: "Please fill all the required fields.",
       });
       return;
+    }{
+      !item ? (
+        await api.addRecord(rec),
+        swal.fire({
+          icon: "success",
+          title: "Saved!",
+          text: "Record saved successfully",
+          timer: 3000
+        })
+      ) : (
+        await api.updateRecord(item.id!, rec),
+        swal.fire({
+          icon: "success",
+          title: "Saved!",
+          text: "Record edited successfully",
+          timer:3000
+        })
+      )
     }
-    await api.addRecord(rec);
-    swal.fire({
-      icon: "success",
-      title: "Saved!",
-      text: "Record has been saved successfully.",
-    });
     onSave();
     onClose();
   };
+
+  React.useEffect(() => {
+    if(!isOpen){
+      setRec({
+        recdate: "",
+        description: "",
+        type: 'Debit',
+        accgrp: 0,
+        amount: 0
+      });
+    }
+  }, [isOpen])
 
   if (!isOpen) return null;
 

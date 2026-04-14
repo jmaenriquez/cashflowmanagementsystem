@@ -17,9 +17,7 @@ function accGrp() {
   const [isDelete, setIsDelete] = React.useState(false);
 
   const [isActionOpen, setIsActionOpen] = React.useState<number | null>(null); //for tooltip
-  const [selectedItem, setSelectedItem] = React.useState<accountList | null>(
-    null,
-  ); //check if have id
+  const [selectedItem, setSelectedItem] = React.useState<accountList | null>(null); //check if have id
 
   const refreshData = () => {
     api.getAccGroup().then((data) => setAccount(data));
