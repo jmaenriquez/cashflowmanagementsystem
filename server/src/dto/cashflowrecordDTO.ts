@@ -18,3 +18,5 @@ function recordDTO(records: CashFlowRecord[]): CashFlowRecordDTO{
         netAmount: totalDebit - totalCredit
     };
 }
+
+export default recordDTO;

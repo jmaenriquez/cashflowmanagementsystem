@@ -17,9 +17,12 @@ interface Records {
 
 function Cashflow() {
   const [cashflowrec, setcashflowrec] = React.useState<Records[]>([]);
-  const totalAmount = cashflowrec
-    .reduce((total, item) => total + Number(item.amount), 0)
-    .toFixed(2);
+  const [total, setTotal] = React.useState({
+    records: [] as Records[],
+    totalDebit: 0,
+    totalCredit: 0,
+    netAmount: 0,
+  });
 
   const [isAddRecord, setIsAddRecord] = React.useState(false); //Form Pop Up
   const [isDelete, setIsDelete] = React.useState(false); //Confirmation Pop Up
@@ -27,13 +30,19 @@ function Cashflow() {
   const [selectedItem, setSelectedItem] = React.useState<Records | null>(null); //for getting item's id
 
   const refreshData = () => {
-    api.getRecord().then((data) => setcashflowrec(data));
+    api.getRecord().then((data) => setTotal(data));
   };
 
   React.useEffect(() => {
     api.getRecord().then((data) => {
-      console.log("date raw: ", data[0].recdate);
-      setcashflowrec(data);
+      console.log("date raw: ", data.records[0]?.recdate);
+      setcashflowrec(data.records);
+    });
+  }, []);
+
+  React.useEffect(() => {
+    api.getRecord().then((data) => {
+      setTotal(data);
     });
   }, []);
 
@@ -97,7 +106,6 @@ function Cashflow() {
             }}
             onClose={() => setIsDelete(false)}
           />
-          
         </div>
 
         <div className="table-auto md:table-fixed mt-2 overflow-x-auto rounded-lg shadow-lg">
@@ -112,61 +120,66 @@ function Cashflow() {
               </tr>
             </thead>
             <tbody>
-              {cashflowrec.length > 0 ? (
-                cashflowrec.map((item, index) => (
+              {total.records.length > 0 ? (
+                total.records.map((item, index) => (
                   <tr key={index}>
                     <td className="py-4 pl-4">{item.description}</td>
                     <td className="py-4 pl-4">{item.accgrpname}</td>
                     <td className="py-4 pl-4">{item.amount}</td>
-                    <td className="py-4 pl-4">{item.recdate.split('-').slice(1).concat(item.recdate.split('-')[0]).join('-')}</td>
                     <td className="py-4 pl-4">
-
+                      {item.recdate
+                        .split("-")
+                        .slice(1)
+                        .concat(item.recdate.split("-")[0])
+                        .join("-")}
+                    </td>
+                    <td className="py-4 pl-4">
                       <div className="relative inline-block text-left">
                         <button
                           onClick={() => {
                             setIsActionOpen(
-                              isActionOpen === index ? null : index
-                            )
+                              isActionOpen === index ? null : index,
+                            );
                           }}
                           className="flex items-center justify-center p-2 rounded-full hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                          >
+                        >
                           <EllipsisVertical />
                         </button>
-                          {isActionOpen === index && (
-                            <>
-                              <div
-                                className="fixed inset-0 z-10"
-                                onClick={() => setIsActionOpen(null)}
-                                ></div>
-                          
-                                <div className="absolute right-8 bottom-0 z-20 w-30 origin-top-right rounded-md bg-white shadow-lg focus:outline-none overflow-hidden">
-                                <div className="py-1">
-                                  <button
-                                    onClick={() => {
-                                      setSelectedItem(item);
-                                      setIsActionOpen(null);
-                                      setIsAddRecord(true);
-                                    }}
-                                    className="flex w-full items-center px-4 py-2 text-sm text-[#1E293B] hover:bg-gray-200 transition-colors"
-                                    >
-                                      <Pencil className="mr-3 h-4 w-4 text-[#1E293B]" />
-                                      <span>Edit</span>
-                                    </button>
-                                    <button
-                                      onClick={() => {
-                                        setSelectedItem(item);
-                                        setIsActionOpen(null);
-                                        setIsDelete(true);
-                                      }}
-                                      className="flex w-full items-center px-4 py-2 text-sm text-red-600 hover:bg-red-100 transition-colors"
-                                      >
-                                        <Trash className="mr-3 h-4 w-4 text-red" />
-                                        <span>Delete</span>
-                                      </button>
-                                    </div>
-                                  </div>
-                            </>
-                          )}  
+                        {isActionOpen === index && (
+                          <>
+                            <div
+                              className="fixed inset-0 z-10"
+                              onClick={() => setIsActionOpen(null)}
+                            ></div>
+
+                            <div className="absolute right-8 bottom-0 z-20 w-30 origin-top-right rounded-md bg-white shadow-lg focus:outline-none overflow-hidden">
+                              <div className="py-1">
+                                <button
+                                  onClick={() => {
+                                    setSelectedItem(item);
+                                    setIsActionOpen(null);
+                                    setIsAddRecord(true);
+                                  }}
+                                  className="flex w-full items-center px-4 py-2 text-sm text-[#1E293B] hover:bg-gray-200 transition-colors"
+                                >
+                                  <Pencil className="mr-3 h-4 w-4 text-[#1E293B]" />
+                                  <span>Edit</span>
+                                </button>
+                                <button
+                                  onClick={() => {
+                                    setSelectedItem(item);
+                                    setIsActionOpen(null);
+                                    setIsDelete(true);
+                                  }}
+                                  className="flex w-full items-center px-4 py-2 text-sm text-red-600 hover:bg-red-100 transition-colors"
+                                >
+                                  <Trash className="mr-3 h-4 w-4 text-red" />
+                                  <span>Delete</span>
+                                </button>
+                              </div>
+                            </div>
+                          </>
+                        )}
                       </div>
                     </td>
                   </tr>
@@ -185,7 +198,7 @@ function Cashflow() {
                 <tr className="">
                   <th className="py-4 pl-4">Grand Total</th>
                   <th className="py-4 pl-4"></th>
-                  <th className="py-4 pl-4">{totalAmount}</th>
+                  <th className="py-4 pl-4">{total.netAmount}</th>
                   <th></th>
                 </tr>
               </tfoot>

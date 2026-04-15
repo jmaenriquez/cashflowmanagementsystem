@@ -2,6 +2,7 @@
 
 import pool from '../config/dbcon';
 import { CashFlowRecord } from '../types';
+import recordDTO from "../dto/cashflowrecordDTO";
 
 async function addRecord(record: CashFlowRecord) {
     const { recdate, description, type, accgrp, amount } = record;
@@ -27,7 +28,7 @@ async function getRecords(){
         FROM cashflowrecords c
         JOIN accgroup a ON c.accgrp = a.id
         `)
-    return result.rows;
+    return recordDTO(result.rows);
 }
 
 async function updateRecord(id: number, record: Partial<CashFlowRecord>) {
