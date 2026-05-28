@@ -9,6 +9,7 @@ interface record {
   recdate: string;
   description: string;
   type: "Debit" | "Credit";
+  accgrpname: string;
   accgrp: number;
   amount: number;
 }
@@ -25,6 +26,7 @@ function Form({ isOpen, onClose, onSave, item }: FormProps) {
     recdate: "",
     description: "",
     type: "Debit",
+    accgrpname: "",
     accgrp: 0,
     amount: 0,
   });
@@ -63,6 +65,7 @@ function Form({ isOpen, onClose, onSave, item }: FormProps) {
         recdate: item.recdate,
         description: item.description,
         type: item.type,
+        accgrpname: item.accgrpname,
         accgrp: item.accgrp,
         amount: item.amount
       });
@@ -73,6 +76,7 @@ function Form({ isOpen, onClose, onSave, item }: FormProps) {
         recdate: "",
         description: "",
         type: 'Debit',
+        accgrpname: "",
         accgrp: 0,
         amount: 0
       })
@@ -104,6 +108,8 @@ function Form({ isOpen, onClose, onSave, item }: FormProps) {
           text: "Record saved successfully",
           timer: 3000
         })
+        
+        
       ) : (
         await api.updateRecord(item.id!, rec),
         swal.fire({
@@ -124,6 +130,7 @@ function Form({ isOpen, onClose, onSave, item }: FormProps) {
         recdate: "",
         description: "",
         type: 'Debit',
+        accgrpname: "",
         accgrp: 0,
         amount: 0
       });
