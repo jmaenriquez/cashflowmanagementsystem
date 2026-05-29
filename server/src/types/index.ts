@@ -22,4 +22,13 @@ interface AccountGroup {
     description: string;
 }
 
-export type { CashFlowRecord, AccountGroup, CashFlowRecordDTO };
+interface Users{
+    id: number,
+    fname: string,
+    lname: string,
+    contact: number,
+    email: string,
+    password: string
+}
+
+export type { CashFlowRecord, AccountGroup, CashFlowRecordDTO, Users};
